@@ -1,0 +1,4 @@
+This is a sample sentence representing the facts of the case.	Facts
+The issue in this case is whether the defendant is guilty.	Issue
+The final judgment states that the defendant is guilty.	Final Judgment
+The arguments presented by the defense were not convincing.	Arguments

@@ -1,0 +1,44 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-CARDINAL",
+      "2": "I-CARDINAL",
+      "3": "L-CARDINAL",
+      "4": "U-CARDINAL",
+      "5": "B-chapter",
+      "6": "I-chapter",
+      "7": "L-chapter",
+      "8": "U-chapter",
+      "9": "B-section_desc",
+      "10": "I-section_desc",
+      "11": "L-section_desc",
+      "12": "U-section_desc",
+      "13": "B-section_title",
+      "14": "I-section_title",
+      "15": "L-section_title",
+      "16": "U-section_title",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-CARDINAL": 1,
+      "I-CARDINAL": 2,
+      "L-CARDINAL": 3,
+      "U-CARDINAL": 4,
+      "B-chapter": 5,
+      "I-chapter": 6,
+      "L-chapter": 7,
+      "U-chapter": 8,
+      "B-section_desc": 9,
+      "I-section_desc": 10,
+      "L-section_desc": 11,
+      "U-section_desc": 12,
+      "B-section_title": 13,
+      "I-section_title": 14,
+      "L-section_title": 15,
+      "U-section_title": 16,
+      "O": 0
+    },
+    "num_tags": 17
+  }
+]

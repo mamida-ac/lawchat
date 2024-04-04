@@ -1,0 +1,1 @@
+C:\Users\Sarumathi\django_projects\practiceplatform\mcq_generator_project\legal_ilp_app\summary

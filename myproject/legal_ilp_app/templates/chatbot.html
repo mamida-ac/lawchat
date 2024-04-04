@@ -1,0 +1,97 @@
+<!-- legal_ilp_project/legal_ilp_app/templates/legal_ilp_app/chatbot.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Chatbot</title>
+    <style>
+        /* Chat container */
+        .chat-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            max-width: 500px;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+        }
+
+        /* Chat messages */
+        .chat-message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e5e5ea;
+        }
+
+        /* Bot messages */
+        .bot-message {
+            text-align: left;
+        }
+
+        /* User messages */
+        .user-message {
+            text-align: right;
+        }
+
+        /* Input field */
+        .input-field {
+            width: calc(100% - 20px);
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        /* Send button */
+        .send-button {
+            margin-top: 5px;
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Initial bot message -->
+        <div class="chat-message bot-message">Hello! Please upload a text file for processing.</div>
+    </div>
+    <!-- File input -->
+    <input type="file" id="file-input" accept=".txt" class="input-field">
+    <button id="upload-button" class="send-button">Upload</button>
+
+    <!-- JavaScript to handle file processing -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#upload-button').click(function() {
+                var fileInput = $('#file-input')[0].files[0];
+                if (fileInput) {
+                    var formData = new FormData();
+                    formData.append('file', fileInput);
+                    $.ajax({
+                        url: '/process-file/',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            var botMessage = '<div class="chat-message bot-message">' + data.summary + '</div>';
+                            $('.chat-container').append(botMessage);
+                            $('#file-input').val(''); // Clear file input
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            var errorMessage = '<div class="chat-message bot-message">An error occurred. Please try again.</div>';
+                            $('.chat-container').append(errorMessage);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

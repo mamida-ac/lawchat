@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated MCQs</title>
+</head>
+<body>
+    <h1>Generated MCQs</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for mcq in mcqs %}
+            <h3>{{ mcq.question }}</h3>
+            <ul>
+                {% for option in mcq.options %}
+                    <li>
+                        <input type="radio" id="{{ mcq.question }}_{{ forloop.counter }}" name="{{ mcq.question }}" value="{{ option }}">
+                        <label for="{{ mcq.question }}_{{ forloop.counter }}">{{ option }}</label>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+    {% for fb in feedback %}
+        <p>Question: {{ fb.question }}</p>
+        {% if fb.is_correct %}
+            <p>Correct!</p>
+        {% else %}
+            <p>Wrong. Correct answer is: {{ fb.correct_answer }}</p>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>

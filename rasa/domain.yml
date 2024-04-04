@@ -1,0 +1,49 @@
+version: "3.1"
+
+intents:
+  - get_section_description
+  - get_section_number_and_title_by_description
+  - get_section_number_by_title
+  - get_chapter_details
+  - goodbye
+  - bot_challenge
+  - greet
+  - get_section_number_by_description
+entities:
+  - section
+  - section_desc
+  - section_description
+  - chapter
+  - section_title
+  - LAW
+  - CARDINAL
+
+actions:
+  - action_get_section_description
+  - action_get_section_number_by_title
+  - action_get_chapter_details
+  - action_get_section_number_and_title_by_description
+  - action_get_section_number_by_description
+responses:
+  utter_greet:
+    - text: "Hello! How can I assist you today?"
+  utter_ask_section_number:
+    - text: "Please provide the section number."
+
+  utter_ask_section_desc:
+    - text: "Please provide the section description."
+
+  utter_iamabot:
+    - text: "I am a chatbot!"
+  utter_goodbye:
+    - text: "Goodbye!"
+
+templates:
+  utter_greet:
+    - text: "Hello! How can I assist you today?"
+
+  utter_goodbye:
+    - text: "Goodbye!"
+
+  utter_default:
+    - text: "Sorry, I didn't understand that. Can you please rephrase?"

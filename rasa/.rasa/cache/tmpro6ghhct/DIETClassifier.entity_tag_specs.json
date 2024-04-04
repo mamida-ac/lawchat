@@ -1,0 +1,44 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-chapter",
+      "2": "I-chapter",
+      "3": "L-chapter",
+      "4": "U-chapter",
+      "5": "B-section",
+      "6": "I-section",
+      "7": "L-section",
+      "8": "U-section",
+      "9": "B-section_desc",
+      "10": "I-section_desc",
+      "11": "L-section_desc",
+      "12": "U-section_desc",
+      "13": "B-section_title",
+      "14": "I-section_title",
+      "15": "L-section_title",
+      "16": "U-section_title",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-chapter": 1,
+      "I-chapter": 2,
+      "L-chapter": 3,
+      "U-chapter": 4,
+      "B-section": 5,
+      "I-section": 6,
+      "L-section": 7,
+      "U-section": 8,
+      "B-section_desc": 9,
+      "I-section_desc": 10,
+      "L-section_desc": 11,
+      "U-section_desc": 12,
+      "B-section_title": 13,
+      "I-section_title": 14,
+      "L-section_title": 15,
+      "U-section_title": 16,
+      "O": 0
+    },
+    "num_tags": 17
+  }
+]

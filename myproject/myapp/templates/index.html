@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rasa Chatbot</title>
+    
+    <style>
+        /* Centering the chat elements */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f2f2f2; /* Grey background color */
+        }
+        
+
+        /* Chat container styles */
+        #chat-container {
+            width: 600px; /* Change width as needed */
+            height: 400px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            border: 5px solid #ccc;
+            padding: 10px;
+            background-color: #f2f2f2; /* Grey background color */
+            margin-bottom: 20px;
+            border-radius: 18px;
+        }
+        .user-message {
+            color: #333; /* Dark grey color */
+            background-color: #f0f0f0; /* Light grey background */
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            text-align: left;
+            font-family: 'Times New Roman', serif !important;
+        }
+
+        /* Bot message styles */
+        .bot-message {
+            color: #fff; /* White color */
+            background-color: #008B8B; /* Blue background */
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            text-align: left;
+            font-family: 'Times New Roman', serif !important;
+            display: block; /* Ensure the message spans the entire width */
+            word-wrap: break-word; 
+            white-space: normal;
+        }
+
+        /* Input and button container styles */
+        #input-container {
+            display: flex;
+            align-items: center;
+        }
+
+        /* User message input styles */
+        #user-message {
+            width:500px;
+            flex: 1;
+            padding: 5px;
+            margin-top: 14px;
+            margin-right: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Send button styles */
+        #send-button {
+            width: 100px;
+            padding: 10px 20px;
+            margin-top: 14px;
+            background: linear-gradient(to bottom, #4CAF50, #006400); /* Gradient background */
+            color: #fff; /* White color */
+            border: none;
+            border-radius: 20px; /* Rounded corners */
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #send-button:hover {
+            background: linear-gradient(to bottom, #006400, #4CAF50); /* Gradient background on hover */
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <!-- Chat messages will be displayed here -->
+    </div>
+    <div id="input-container">
+        <input type="text" id="user-message" placeholder="Type your message...">
+        <button id="send-button" onclick="sendMessage()">Send</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function sendMessage() {
+            var userMessage = document.getElementById("user-message").value;
+            document.getElementById("user-message").value = "";
+
+            $.ajax({
+                url: "{% url 'send_message' %}",
+                type: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}" // Include CSRF token for POST requests
+                },
+                data: {
+                    user_message: userMessage
+                },
+                success: function(data) {
+                    var chatContainer = document.getElementById("chat-container");
+                    var userMessageElement = document.createElement("p");
+                    userMessageElement.textContent = "You: " + userMessage;
+                    userMessageElement.classList.add("user-message");
+                    chatContainer.appendChild(userMessageElement);
+
+                    var isFirstSection = true; // Flag to track if it's the first section
+                    var chapterTitle = ""; // Variable to store the current chapter title
+                    var botResponses = data.bot_response.split('"'); // Split by double quotation marks (")
+                    botResponses.forEach(function(response) {
+                        if (response.trim()) { // Check if the response is not empty
+                            if (response.includes("Details of Chapter")) {
+                                // Extract chapter title
+                                chapterTitle = response.trim().replace("Details of ", "");
+                                var chapterElement = document.createElement("div");
+                                chapterElement.textContent = chapterTitle;
+                                chapterElement.classList.add("bot-message");
+                                chatContainer.appendChild(chapterElement);
+                            } else if (response.includes("Section")) {
+                                // Extract section details
+                                var sectionDetails = response.trim().split(": ");
+                                var sectionElement = document.createElement("div");
+                                sectionElement.textContent = "Section: " + sectionDetails[0] + ", section_title: " + sectionDetails[1].replace("-", ",") + ", section_desc: " + sectionDetails.slice(2).join(": ");
+                                sectionElement.classList.add("bot-message");
+                                chatContainer.appendChild(sectionElement);
+                            } else {
+                                // Print other bot responses
+                                var botMessageElement = document.createElement("div");
+                                botMessageElement.textContent = "Bot: " + response.trim();
+                                botMessageElement.classList.add("bot-message");
+                                chatContainer.appendChild(botMessageElement);
+                            }
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error sending message:", error);
+                }
+            });
+        }
+
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

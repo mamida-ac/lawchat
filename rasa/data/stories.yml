@@ -1,0 +1,37 @@
+version: "3.1"
+
+stories:
+  - story: Greeting
+    steps:
+      - intent: greet
+      - action: utter_greet
+
+  - story: Fetch section description by section number
+    steps:
+      - intent: get_section_description
+      - action: action_get_section_description
+
+  - story: Fetch section number by description
+    steps:
+      - intent: get_section_number_by_description
+      - action: action_get_section_number_by_description
+
+  - story: Fetch section number and title by section description
+    steps:
+      - intent: get_section_number_and_title_by_description
+      - action: action_get_section_number_and_title_by_description
+  - story: Fetch section number by section title
+    steps:
+      - intent: get_section_number_by_title
+      - action: action_get_section_number_by_title
+
+  - story: Fetch section title and description by section number
+    steps:
+      - intent: get_section_description
+      - action: action_get_section_description
+
+  - story: Fetch chapter details by chapter number
+    steps:
+      - intent: get_chapter_details
+      - action: action_get_chapter_details
+

@@ -1,0 +1,77 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: get_section_description
+  examples: |
+     - What is section [5](section)?
+     - Explain section [3](section)?
+     - Can you tell me about section [7](section)?
+     - What does section [2](section) say?
+     - Describe section [4](section) for me.
+     - Please explain the contents of section [6](section).
+     - What is stated in section [8](section)?
+     - Could you provide details about section [9](section)?
+
+- intent: get_section_number_by_description
+  examples:  |
+    - What is the section number for [This Act shall be called the Indian Penal Code, and shall extend to the whole of India except the State of Jammu and Kashmir](section_desc)?
+    - Provide the section number for [The pronoun he and its derivatives are used for any person whether male or female](section_desc)?
+    - Give me the section number for the [Repealed ibid](section_desc)?
+    - What is the section number for the [In every part of this Code, except where a contrary intention appears from the context, words which refer to acts done extend also to illegal omissions](section_desc)?
+    - Please tell me the section number for the statement: [No person subject to the Army Act, the Army Act, 1950 (46 of 1950), the Naval Discipline Act, the Indian Navy (Discipline) Act, 1934 (34 of 1934), the Air Force Act or the Air Force Act, 1950 (45 of 1950), is subject to punishment under this Code for any of the offences defined in this Chapter](section_desc)?
+
+- intent: get_section_number_and_title_by_description
+  examples:  |
+    - What is the section number and title for [This Act shall be called the Indian Penal Code, and shall extend to the whole of India except the State of Jammu and Kashmir](section_desc)?
+    - Provide the section number and title for [The pronoun he and its derivatives are used for any person whether male or female](section_desc)?
+    - Give me the section number and title for the [Repealed ibid](section_desc)?
+    - What is the section number and title for the [In every part of this Code, except where a contrary intention appears from the context, words which refer to acts done extend also to illegal omissions](section_desc)?
+    - Please provide the section number and title for the following statement: [No person shall be punished for any offence](section_desc)?
+
+- intent: get_chapter_details
+  examples: |
+    - What are the details of chapter [1](chapter)?
+    - Explain chapter [2](chapter)?
+    - Can you provide information about chapter [3](chapter)?
+    - Please describe chapter [4](chapter).
+- intent: get_section_number_by_title
+  examples: |
+    - Give me the section number for [Extension of Code to extra-territorial offences](section_title).
+    - What is the section number for [Title and extent of operation of the Code](section_title)?
+    - Provide the section number for [Certain laws not to be affected by this Act](section_title)?.
+    - Please tell me the section number for [A person is said to do a thing fraudulently if he does that thing with intent to defraud but not otherwise](section_title).
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?

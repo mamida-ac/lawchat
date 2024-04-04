@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .question-container {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .question-label {
+            font-weight: bold;
+        }
+
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .option-item {
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+
+        .option-item:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">MCQ Generator</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <label for="chapter">Enter Chapter Number:</label>
+                <input type="number" class="form-control" id="chapter" min="1" placeholder="Chapter Number">
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-6">
+                <label for="mcqType">Select MCQ Type:</label>
+                <select id="mcqType" class="form-control">
+                    <option value="Section">Section</option>
+                    <option value="Description">Description</option>
+                </select>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-6">
+                <button class="btn btn-primary btn-block" onclick="submitClicked()">Save</button>
+            </div>
+        </div>
+        <div id="questions" class="mt-5"></div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+        
+        var ipcData = '{{ ipc_data|default:""|escapejs|safe }}';
+        var ipc=JSON.parse(ipcData);        
+        console.log(typeof(ipc));
+        
+        function submitClicked() {
+            var chapterInput = document.getElementById("chapter").value;
+            var mcqTypeSelect = document.getElementById("mcqType").value;
+            console.log(chapterInput);
+            console.log(mcqTypeSelect);
+            console.log("Submit clicked");
+            if (mcqTypeSelect == 'Section') {
+                console.log('section selected');
+                // Filter sections for the selected chapter
+                var sections = ipc.filter(function(entry) {
+                    return entry.chapter == chapterInput;
+                });
+
+                // Shuffle sections (questions)
+                sections = shuffleArray(sections);
+
+                console.log(sections);
+                // Array to store used section indices
+                var questionsDiv = document.getElementById("questions");
+                questionsDiv.innerHTML = ""; // Clear existing questions
+
+                sections.forEach(function(section, index) {
+                    var questionDiv = document.createElement("div");
+                    questionDiv.classList.add("question-container");
+
+                    var questionLabel = document.createElement("label");
+                    questionLabel.classList.add("question-label");
+                    questionLabel.textContent = "Question " + (index + 1) + ": " + section.section_desc;
+                    questionDiv.appendChild(questionLabel);
+
+                    // Setting ID for the question
+                    questionDiv.id = "question" + index;
+
+                    // Add options with IDs
+                    var optionsList = document.createElement("ul");
+                    optionsList.classList.add("options-list");
+                    optionsList.id = "optionsList" + index;
+                    var options = getRandomOptions(sections, section.Section);
+                    options.forEach(function(optionText, optionIndex) {
+                        var optionItem = document.createElement("li");
+                        optionItem.classList.add("option-item");
+                        optionItem.textContent = optionText;
+                        optionItem.id = "optionItem" + index + "-" + optionIndex; // Unique ID for each option item
+                        optionItem.addEventListener("click", function() {
+                            validateAnswer(index,optionItem.id, optionText, section.Section);
+                        });
+                        optionsList.appendChild(optionItem);
+                    });
+                    questionDiv.appendChild(optionsList);
+
+                    questionsDiv.appendChild(questionDiv);
+                });
+        
+                function getRandomOptions(sections, currentOption) {
+                    var options = [];
+                    var correctOptionAdded = false;
+                    while (options.length < 3) {
+                        var randomIndex = Math.floor(Math.random() * sections.length);
+                        var randomSection = sections[randomIndex];
+                        if (randomSection.Section !== currentOption && !options.includes(randomSection.Section)) {
+                            options.push(randomSection.Section);
+                            if (!correctOptionAdded && randomSection.Section === currentOption) {
+                                correctOptionAdded = true;
+                            }
+                        }
+                    }
+                    // If the correct option was not added, add it to the options list
+                    if (!correctOptionAdded) {
+                        options[Math.floor(Math.random() * options.length)] = currentOption;
+                    }
+                    return options;
+                }
+
+                function validateAnswer(questionIndex,optionItemid, selectedOption, correctAnswer) {
+                var questionDiv = document.getElementById("question" + questionIndex);
+                var optionsList = document.getElementById("optionsList" + questionIndex);
+                //var selectedOptionid=document.getElementById(selectedOption);
+                console.log(optionItemid);
+                var id = document.getElementById(optionItemid);
+                var resultDiv = document.createElement("div");
+                resultDiv.textContent = "Question " + (questionIndex + 1) + ": ";
+                if (selectedOption === correctAnswer) {
+                    resultDiv.textContent += "Correct!";
+                    resultDiv.style.color = "green";
+                    id.style.backgroundColor = "lightgreen"; // Change options list background to light green
+                } else {
+                    resultDiv.textContent += "Wrong! Correct answer: " + correctAnswer;
+                    resultDiv.style.color = "red";
+                    id.style.backgroundColor = "lightcoral"; // Change options list background to light coral
+                }
+                questionDiv.appendChild(resultDiv);
+
+                // Highlight the selected option
+            
+            }
+
+
+            function shuffleArray(array) {
+                for (var i = array.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
+                return array;
+            }
+         }
+
+        else{
+            console.log('decription selected');
+        }
+    }
+</script>
+</body>
+</html>
